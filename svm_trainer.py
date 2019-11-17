@@ -11,7 +11,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import pickle
 
 def hog(img):
-    cellx = celly = 8
+    cellx = celly = 32
     bin_n = 9 #Number of bins
     bin = np.int32(180/bin_n)
 
@@ -73,42 +73,44 @@ def hog(img):
 
 # In order to apply HoG we will use OpenCV function
 # First we stack the desired samples in a variable
-samp = 50
-letnum = 3
-X = np.zeros(shape=(samp*letnum,15876))
-Y = np.zeros(samp*letnum)
+# data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+#         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
+data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
+samp = 10
+letnum = len(data)
+# X = np.zeros(shape=(samp*letnum,15876))
+X = np.zeros(shape=(samp*letnum,576))
+Y = list()
+num = 0
 
-for l in range(0,3):
-    if l==0:
-        path = 'A'
-        y = np.array([1])
-    elif l==1:
-        path = 'B'
-        y = np.array([2])
-    elif l==2:
-        path = 'C'
-        y = np.array([3])
-
-    path = '../../../../asl_alphabet_train/'+path+'/'+path
+for l in data:
+    path = '../../../../asl_alphabet_train/'+l+'/'+l
+    num +=1
 
     # We'll take a sample of 100 for each letter
     for i in range(1,samp+1):
         dpath = path+str(i)+'.jpg'
-        print(dpath + '   has been succesfully loaded!')
 
         img = cv.imread(dpath)
-        img = img[8:199-8,8:199-8]
-        img = np.float32(img)/255.0
-        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        if (len(img) != None):
+            print(dpath + '   has been succesfully loaded!')
 
-        # cv.imshow('Imagen', img)
-        # cv.waitKey(0)S
+            img = img[8:199-8,8:199-8]
+            img = np.float32(img)/255.0
+            img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-        # The function hog will only accept 1 dimension images (Gray)
-        X[l*samp + i-1] = hog(img)
-        Y[l*samp + i-1] = y
+            # cv.imshow('Imagen', img)
+            # cv.waitKey(0)S
 
-print(Y)
+            # The function hog will only accept 1 dimension images (Gray)
+            X[(num-1)*samp + i-1] = hog(img)
+            Y.append(l)
+        else:
+            print("Error! no image found")
+            i = samp
+
+
+
 # Now that we already have the variables well fit the VSM
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
@@ -123,26 +125,26 @@ print(classification_report(Y_test, Y_pred))
 print("Accuracy = ", svclassifier.score(X_test, Y_test))
 
 
-svclassifier2 = SVC(kernel='sigmoid')
-svclassifier2.fit(X_train, Y_train)
-
-Y_pred = svclassifier2.predict(X_test)
-
-print("\n\nCLASSIFIER 2: Sigmoid\n\n")
-print(confusion_matrix(Y_test, Y_pred))
-print(classification_report(Y_test, Y_pred))
-print("Accuracy = ", svclassifier2.score(X_test, Y_test))
-
-
-svclassifier3 = SVC(kernel='rbf')
-svclassifier3.fit(X_train, Y_train)
-
-Y_pred = svclassifier3.predict(X_test)
-
-print("\n\nCLASSIFIER 3: Gaussian\n\n")
-print(confusion_matrix(Y_test, Y_pred))
-print(classification_report(Y_test, Y_pred))
-print("Accuracy = ", svclassifier3.score(X_test, Y_test))
+# svclassifier2 = SVC(kernel='sigmoid')
+# svclassifier2.fit(X_train, Y_train)
+#
+# Y_pred = svclassifier2.predict(X_test)
+#
+# print("\n\nCLASSIFIER 2: Sigmoid\n\n")
+# print(confusion_matrix(Y_test, Y_pred))
+# print(classification_report(Y_test, Y_pred))
+# print("Accuracy = ", svclassifier2.score(X_test, Y_test))
+#
+#
+# svclassifier3 = SVC(kernel='rbf')
+# svclassifier3.fit(X_train, Y_train)
+#
+# Y_pred = svclassifier3.predict(X_test)
+#
+# print("\n\nCLASSIFIER 3: Gaussian\n\n")
+# print(confusion_matrix(Y_test, Y_pred))
+# print(classification_report(Y_test, Y_pred))
+# print("Accuracy = ", svclassifier3.score(X_test, Y_test))
 
 # Save the model to disk
 filename = 'bin/src/model.sav'
