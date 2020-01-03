@@ -1,6 +1,17 @@
 import numpy as np
 import cv2 as cv
 
+#esto es para cargar el clasificador de caras de OpenCV
+face_cascade = cv.CascadeClassifier('bin/src/haarcascade_frontalface_default.xml')
+
+#Inicializamos los intervalos de la piel
+H_LowThreshold = 0
+H_HighThreshold = 0
+S_LowThreshold = 0
+S_HighThreshold = 0
+V_LowThreshold = 0
+V_HighThreshold = 0
+
 #funcion que pone los intervalos a los canales H, S y V en función de la piel del usuario
 #No devuelve nada, guarda los valores globalmente
 def captureSkin(frame):
@@ -126,12 +137,12 @@ def backgroundRemoval(frame, bg):
 
 #Para evitar que la cara caiga dentro de el rango de valores de los canales,
 #se aplica esta funcion para localizar la cara y ponerle un rectangulo negro encima
-def faceRemove(f, face_c):
+def faceRemove(f):
 
     # Convert to grayscale
     gray = cv.cvtColor(f, cv.COLOR_BGR2GRAY)
     # Detect the faces
-    faces = face_c.detectMultiScale(gray, 1.1, 4)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
     # Draw the rectangle around each face
     for (x, y, w, h) in faces:
         cv.rectangle(f, (x-20, y-50), (x + w+20, y + h+80), (0, 0, 0), -1)
@@ -160,9 +171,9 @@ def Bounding(binar,b):
     else:
         mayor = h
         #pongo el rectangulo
-    #cv.rectangle(b, (x, y), (x + mayor, y + mayor), (0, 255, 0), 2)
+    cv.rectangle(b, (x, y), (x + mayor, y + mayor), (0, 255, 0), 2)
     #me quedo con la mano solo
-    squared = b[x:x + mayor,:y + mayor]
+    # squared = b[x:x + mayor,y:y + mayor]
     #la cambio de tamanio
-    resized = cv.resize(squared,(320,320),interpolation=cv.INTER_AREA)
-    return resized
+    # resized = cv.resize(squared,(160,160),interpolation=cv.INTER_AREA)
+    return b

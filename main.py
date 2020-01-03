@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix
 import pickle
-import math
 from _hog import hog
 from _imgProc import *
 
@@ -15,16 +14,8 @@ from _imgProc import *
 #3º: Levantar la mano y que la palma ocupe las dos regiones rectangulares, y luego pulsar s, para que capture la piel
 #4º: Enjoy
 
-#esto es para cargar el clasificador de caras de OpenCV
-face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
-
-#Inicializamos los intervalos de la piel
-H_LowThreshold = 0
-H_HighThreshold = 0
-S_LowThreshold = 0
-S_HighThreshold = 0
-V_LowThreshold = 0
-V_HighThreshold = 0
+# Open saved SVM model
+loaded_model = pickle.load(open("bin/src/model.sav", "rb"))
 
 #320x320
 print('hello world')
@@ -48,15 +39,6 @@ while True:
         print("Can't receive frame (stream end?). Exiting ...")
         break
 
-
-    # get dimensions of image
-    #dimensions = frame.shape
-
-    # height, width, number of channels in image
-    #height = frame.shape[0]
-    #width = frame.shape[1]
-    #channels = frame.shape[2]
-
     base = frame
 
     # Ponemos los rectangulos
@@ -71,22 +53,23 @@ while True:
     cv.imshow('frame', base)
 
     #Quitamos la cara
-    noFace = faceRemove(frame, face_cascade)
-
+    noFace = faceRemove(frame)
     #Quitamos el fondo
     BackGround = backgroundRemoval(noFace,bg)
-
     #Binarizamos la imagen
     bin = binarization(BackGround, H_LowThreshold, H_HighThreshold, S_LowThreshold, S_HighThreshold, V_LowThreshold, V_HighThreshold)
-
     #Situamos el Bounding box
-    bnd = Bounding(bin,base)
+    origbnd = Bounding(bin,frame)
 
 
     cv.imshow('Foreground',BackGround)
     cv.imshow('user skin', bin)
-    cv.imshow('Bounding box', bnd)
-
+    cv.imshow('Bounding box', origbnd)
+    # bnd = np.float32(bnd)/255.0
+    # bnd = cv.cvtColor(bnd, cv.COLOR_BGR2GRAY)
+    # data = hog(bnd)
+    # data = np.array([data])
+    # print(loaded_model.predict(data))
 
     #teclas
     k = cv.waitKey(1) & 0xFF
