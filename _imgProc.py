@@ -152,7 +152,7 @@ def Bounding(binar,b):
     x, y, w, h = cv.boundingRect(cnt)
     mayor = 0
     borde = 10
-    width, height = cv.GetSize(b)
+    # width, height = cv.GetSize(b)
     #me quedo con la dimension del rectangulo mayor
     if(w>h):
         mayor = w
