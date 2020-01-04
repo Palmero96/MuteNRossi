@@ -1,17 +1,6 @@
 import numpy as np
 import cv2 as cv
 
-#esto es para cargar el clasificador de caras de OpenCV
-face_cascade = cv.CascadeClassifier('bin/src/haarcascade_frontalface_default.xml')
-
-#Inicializamos los intervalos de la piel
-H_LowThreshold = 0
-H_HighThreshold = 0
-S_LowThreshold = 0
-S_HighThreshold = 0
-V_LowThreshold = 0
-V_HighThreshold = 0
-
 #funcion que pone los intervalos a los canales H, S y V en función de la piel del usuario
 #No devuelve nada, guarda los valores globalmente
 def captureSkin(frame):
@@ -51,24 +40,18 @@ def captureSkin(frame):
     V_offsetLowThreshold = 30#80
     V_offsetHighThreshold = 30#30
 
-    # calculo el Threshold minimo y maximo de cada canal
-    global H_LowThreshold
-    global H_HighThreshold
-    global S_LowThreshold
-    global S_HighThreshold
-    global V_LowThreshold
-    global V_HighThreshold
+    Threshold = [0,0,0,0,0,0]
 
-    H_LowThreshold = min(mean1H, mean2H) - H_offsetLowThreshold
-    H_HighThreshold = max(mean1H, mean2H) + H_offsetHighThreshold
+    Threshold[0] = min(mean1H, mean2H) - H_offsetLowThreshold
+    Threshold[1] = max(mean1H, mean2H) + H_offsetHighThreshold
 
-    S_LowThreshold = min(mean1S, mean2S) - S_offsetLowThreshold
-    S_HighThreshold = max(mean1S, mean2S) + S_offsetHighThreshold
+    Threshold[2] = min(mean1S, mean2S) - S_offsetLowThreshold
+    Threshold[3] = max(mean1S, mean2S) + S_offsetHighThreshold
 
-    V_LowThreshold = min(mean1V, mean2V) - V_offsetLowThreshold
-    V_HighThreshold = max(mean1V, mean2V) + V_offsetHighThreshold
+    Threshold[4] = min(mean1V, mean2V) - V_offsetLowThreshold
+    Threshold[5] = max(mean1V, mean2V) + V_offsetHighThreshold
 
-    return
+    return Threshold
 
 #Esta funcion toma la imagen sin fondo y la binarza, poniendo a blanco la mano
 #Tambien aplica unas operaciones morfologicas para que se vea mas delineada y entera
@@ -137,12 +120,12 @@ def backgroundRemoval(frame, bg):
 
 #Para evitar que la cara caiga dentro de el rango de valores de los canales,
 #se aplica esta funcion para localizar la cara y ponerle un rectangulo negro encima
-def faceRemove(f):
+def faceRemove(f, face_c):
 
     # Convert to grayscale
     gray = cv.cvtColor(f, cv.COLOR_BGR2GRAY)
     # Detect the faces
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    faces = face_c.detectMultiScale(gray, 1.1, 4)
     # Draw the rectangle around each face
     for (x, y, w, h) in faces:
         cv.rectangle(f, (x-20, y-50), (x + w+20, y + h+80), (0, 0, 0), -1)
@@ -155,7 +138,10 @@ def faceRemove(f):
 #y devuelve la imagen en el formato que le guste a Alvaro y cuadrada
 def Bounding(binar,b):
     contours, hierarchy = cv.findContours(binar,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
-    cnt = max(contours, key = lambda x: cv.contourArea(x))
+    if len(contours) > 0:
+        cnt = max(contours, key = lambda x: cv.contourArea(x))
+    else:
+        return
     M = cv.moments(cnt)
 
     #Centroid
@@ -165,15 +151,37 @@ def Bounding(binar,b):
     #cv.rectangle(b, (cx-100, cy-100), (cx+130, cy+130), (255, 0, 0), 2)
     x, y, w, h = cv.boundingRect(cnt)
     mayor = 0
+    borde = 10
+    width, height = cv.GetSize(b)
     #me quedo con la dimension del rectangulo mayor
     if(w>h):
         mayor = w
     else:
         mayor = h
         #pongo el rectangulo
-    cv.rectangle(b, (x, y), (x + mayor, y + mayor), (0, 255, 0), 2)
+
+    # if x <= borde:
+    #     xlow = 1
+    # else:
+    #     xlow = x-borde
+    # if x + borde > width:
+    #     xhigh = width
+    # else:
+    #     xhigh = x+borde
+    # if y <= borde:
+    #     ylow = 1
+    # else:
+    #     ylow = y-borde
+    # if y + borde > height:
+    #     yhigh = height
+    # else:
+    #     yhigh = y+borde
+
+
+    # cv.rectangle(b, (xlow, ylow), (xhigh, yhigh), (0, 255, 0), 2)
+    cv.rectangle(b, (x,y), (x+mayor, y+mayor), (0,255,0), 2)
     #me quedo con la mano solo
-    # squared = b[x:x + mayor,y:y + mayor]
+    squared = b[x:x+mayor,y:y+mayor]
     #la cambio de tamanio
-    # resized = cv.resize(squared,(160,160),interpolation=cv.INTER_AREA)
-    return b
+    resized = cv.resize(squared,(160,160),interpolation=cv.INTER_AREA)
+    return resized, b
