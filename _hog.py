@@ -6,8 +6,8 @@ from numpy import pi as pi
 from numpy.linalg import norm
 
 def hog(img):
-    cellx = celly = 32
-    bin_n = 9 #Number of bins
+    cellx = celly = 16
+    bin_n = 18 #Number of bins
     bin = np.int32(180/bin_n)
 
     n_cellx = int(img.shape[0]/cellx)

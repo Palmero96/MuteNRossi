@@ -16,13 +16,13 @@ import pickle
 
 # In order to apply HoG we will use OpenCV function
 # First we stack the desired samples in a variable
-data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
-# data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
-samp = 50
+# data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+#         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
+data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
+samp = 10
 letnum = len(data)
 # X = np.zeros(shape=(samp*letnum,15876))
-X = np.zeros(shape=(samp*letnum,576))
+X = np.zeros(shape=(samp*letnum,5832))
 Y = list()
 num = 0
 
@@ -39,11 +39,13 @@ for l in data:
             print(dpath + '   has been succesfully loaded!')
 
             img = img[8:199-8,8:199-8]
+            dim = (160, 160)
+            img = cv.resize(img, dim, interpolation = cv.INTER_AREA)
             img = np.float32(img)/255.0
             img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
             # cv.imshow('Imagen', img)
-            # cv.waitKey(0)S
+            # cv.waitKey(0)
 
             # The function hog will only accept 1 dimension images (Gray)
             X[(num-1)*samp + i-1] = hog(img)
