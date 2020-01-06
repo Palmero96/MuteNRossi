@@ -177,12 +177,12 @@ def Bounding(binar,b):
     else:
         mayor = h
         #pongo el rectangulo
-    #cv.rectangle(b, (x, y), (x + mayor, y + mayor), (0, 255, 0), 2)
+    cv.rectangle(b, (x, y), (x + mayor, y + mayor), (0, 255, 0), 2)
     #me quedo con la mano solo
-    squared = b[x:x + mayor,:y + mayor]
+    squared = b[x+3:x + mayor - 3,y+3:y - 3 + mayor]
     #la cambio de tamanio
     resized = cv.resize(squared,(320,320),interpolation=cv.INTER_AREA)
-    return resized
+    return b, resized
 
 #320x320
 print('hello world')
@@ -226,7 +226,7 @@ while True:
     cv.putText(base, 'MutenRossi', (58, 58), font, 2, (255, 255, 255), 1, cv.LINE_AA)
 
     # Mostramos la imagen
-    cv.imshow('frame', base)
+    #cv.imshow('frame', base)
 
     #Quitamos la cara
     noFace = faceRemove(frame)
@@ -238,8 +238,10 @@ while True:
     bin = binarization(BackGround, H_LowThreshold, H_HighThreshold, S_LowThreshold, S_HighThreshold, V_LowThreshold, V_HighThreshold)
 
     #Situamos el Bounding box
-    bnd = Bounding(bin,base)
+    bnd,bnd_res = Bounding(bin,base)
 
+    print('huauauauauauuaa',bnd_res.shape[0])
+    print('huauauauauauuaa',bnd_res.shape[1])
 
     cv.imshow('Foreground',BackGround)
     cv.imshow('user skin', bin)
