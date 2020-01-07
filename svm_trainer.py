@@ -22,7 +22,7 @@ data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
 samp = 30
 letnum = len(data)
 # X = np.zeros(shape=(samp*letnum,15876))
-X = np.zeros(shape=(samp*letnum,1620))
+X = np.zeros(shape=(samp*letnum,3888))
 Y = list()
 num = 0
 

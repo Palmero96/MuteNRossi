@@ -15,7 +15,7 @@ opts = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
 
 dim = (160, 160)
-data = np.zeros(shape=(len(opts),1620))
+data = np.zeros(shape=(len(opts),3888))
 num = 0
 
 for o in opts:
