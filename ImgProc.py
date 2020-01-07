@@ -181,18 +181,18 @@ def Bounding(binar,f):
             mayor = h
             #pongo el rectangulo
         #Bounding rectangle
-        #X_ini = x-15
-        #Y_ini = y-15
-        #X_end = x + mayor + 15
-        #Y_end = y + mayor + 15
-        #cv.rectangle(b, (X_ini, Y_ini), (X_end, Y_end), (0, 255, 0), 2)
+        X_ini = x-15
+        Y_ini = y-15
+        X_end = x + mayor + 15
+        Y_end = y + mayor + 15
+        cv.rectangle(f, (X_ini, Y_ini), (X_end, Y_end), (0, 255, 0), 2)
 
         # Centroid rectangle
-        X_ini = cx - round(mayor/2)
-        Y_ini = cy - round(mayor/2) - 20
-        X_end = cx + round(mayor/2)
-        Y_end = cy + round(mayor/2)
-        cv.rectangle(f, (X_ini, Y_ini), (X_end, Y_end), (0, 0, 255), 2)
+        #X_ini = cx - round(mayor/2)
+        #Y_ini = cy - round(mayor/2) - 20
+        #X_end = cx + round(mayor/2)
+        #Y_end = cy + round(mayor/2)
+        #cv.rectangle(f, (X_ini, Y_ini), (X_end, Y_end), (0, 0, 255), 2)
 
         #me quedo con la mano solo
         #squared = f[X_ini:X_end, Y_ini:Y_end]
