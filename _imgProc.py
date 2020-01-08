@@ -136,7 +136,7 @@ def faceRemove(f, face_c):
 #que le guste a Alvaro
 #recibe la imagen binarizada y la imagen base
 #y devuelve la imagen en el formato que le guste a Alvaro y cuadrada
-def Bounding(binar,b):
+def Bounding(binar,f):
     try:
         contours, hierarchy = cv.findContours(binar,cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
         cnt = max(contours, key = lambda x: cv.contourArea(x))

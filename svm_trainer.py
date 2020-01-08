@@ -17,12 +17,12 @@ import pickle
 # In order to apply HoG we will use OpenCV function
 # First we stack the desired samples in a variable
 data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')
 # data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
-samp = 30
+samp = 50
 letnum = len(data)
 # X = np.zeros(shape=(samp*letnum,15876))
-X = np.zeros(shape=(samp*letnum,3888))
+X = np.zeros(shape=(samp*letnum,2916))
 Y = list()
 num = 0
 

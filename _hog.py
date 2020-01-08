@@ -7,7 +7,7 @@ from numpy.linalg import norm
 
 def hog(img):
     cellx = celly = 16
-    bin_n = 12 #Number of bins
+    bin_n = 9 #Number of bins
     bin = np.int32(180/bin_n)
 
     n_cellx = int(img.shape[0]/cellx)
