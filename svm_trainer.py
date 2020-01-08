@@ -16,14 +16,16 @@ import pickle
 
 # In order to apply HoG we will use OpenCV function
 # First we stack the desired samples in a variable
-# data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+# data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n',
 #         'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
-data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l')
+# data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k')
+data = ('a', 'b')
 type = ('19', '38', '57', '76', '95')
-samp = 1
+samp = 8
 letnum = len(data)
+typenum = len(type)
 # X = np.zeros(shape=(samp*letnum,15876))
-X = np.zeros(shape=(samp*letnum,2916))
+X = np.zeros(shape=(samp*letnum*typenum,20736))
 Y = list()
 num = 0
 
@@ -42,8 +44,7 @@ for l in data:
             if (len(img) != None):
                 print(ddpath + '   has been succesfully loaded!')
 
-                img = img[8:199-8,8:199-8]
-                dim = (160, 160)
+                dim = (200, 200)
                 img = cv.resize(img, dim, interpolation = cv.INTER_AREA)
                 img = np.float32(img)/255.0
                 img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
