@@ -84,10 +84,11 @@ def Imaq(q):
             noFace = faceRemove(frame, face_cascade)
             #Quitamos el fondo
             BackGround = backgroundRemoval(noFace,bg)
+            backaux = BackGround
             #Binarizamos la imagen
             imbin = binarization(BackGround, H_LowThreshold, H_HighThreshold, S_LowThreshold, S_HighThreshold, V_LowThreshold, V_HighThreshold)
             #Situamos el Bounding box
-            origbnd, bnd = Bounding(imbin,frame)
+            origbnd, bnd = Bounding(imbin,backaux)
 
             try:
                 cv.imshow('Bounding box', origbnd)

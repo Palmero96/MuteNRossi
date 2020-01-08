@@ -175,7 +175,8 @@ def Bounding(binar,f):
         squared = f[Y_ini:Y_end, X_ini:X_end]
         # la cambio de tamanio
         resized = cv.resize(squared, (160, 160), interpolation=cv.INTER_AREA)
-        return f, resized
+        gray = cv.cvtColor((cv.cvtColor(resized, cv.COLOR_HSV2BGR)), cv.COLOR_BGR2GRAY)
+        return f, gray
     except:
         print('Nope')
         return f, None
