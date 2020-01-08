@@ -16,10 +16,11 @@ import pickle
 
 # In order to apply HoG we will use OpenCV function
 # First we stack the desired samples in a variable
-data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')
-# data = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
-samp = 50
+# data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+#         'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+data = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l')
+type = ('19', '38', '57', '76', '95')
+samp = 1
 letnum = len(data)
 # X = np.zeros(shape=(samp*letnum,15876))
 X = np.zeros(shape=(samp*letnum,2916))
@@ -27,32 +28,35 @@ Y = list()
 num = 0
 
 for l in data:
-    path = '../../../../asl_alphabet_train/'+l+'/'+l
+    path = 'dataset/grayscale_frames/'+l+'_'
     num +=1
 
     # We'll take a sample of 100 for each letter
     for i in range(1,samp+1):
-        dpath = path+str(i)+'.jpg'
+        dpath = path+str(i)+'-'
 
-        img = cv.imread(dpath)
-        if (len(img) != None):
-            print(dpath + '   has been succesfully loaded!')
+        for t in type:
+            ddpath = dpath+t+'.png'
 
-            img = img[8:199-8,8:199-8]
-            dim = (160, 160)
-            img = cv.resize(img, dim, interpolation = cv.INTER_AREA)
-            img = np.float32(img)/255.0
-            img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            img = cv.imread(ddpath)
+            if (len(img) != None):
+                print(ddpath + '   has been succesfully loaded!')
 
-            # cv.imshow('Imagen', img)
-            # cv.waitKey(0)
+                img = img[8:199-8,8:199-8]
+                dim = (160, 160)
+                img = cv.resize(img, dim, interpolation = cv.INTER_AREA)
+                img = np.float32(img)/255.0
+                img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-            # The function hog will only accept 1 dimension images (Gray)
-            X[(num-1)*samp + i-1] = hog(img)
-            Y.append(l)
-        else:
-            print("Error! no image found")
-            i = samp
+                # cv.imshow('Imagen', img)
+                # cv.waitKey(0)
+
+                # The function hog will only accept 1 dimension images (Gray)
+                X[(num-1)*samp + i-1] = hog(img)
+                Y.append(l)
+            else:
+                print("Error! no image found")
+                i = samp
 
 
 
