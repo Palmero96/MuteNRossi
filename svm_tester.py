@@ -12,7 +12,7 @@ from _hog import hog
 loaded_model = pickle.load(open("bin/src/model.sav", "rb"))
 
 opts = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'nothing')
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z')
 
 dim = (160, 160)
 data = np.zeros(shape=(len(opts),2916))
