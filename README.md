@@ -3,7 +3,7 @@
 ## Introduction
 MuteNRossi is an application for American Sign Language recognition elaborated by students of Computer Vision in UPM.
 
-![Logo](bin/muten.png){:height="50%" width="50%"}
+![Logo](bin/muten.png)
 
 ## Instructions
 1. Run main.py
