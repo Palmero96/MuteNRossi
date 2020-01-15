@@ -3,7 +3,7 @@
 ## Introduction
 MuteNRossi is an application for American Sign Language recognition elaborated by students of Computer Vision in UPM.
 
-![Logo](bin/muten.png | width=150)
+![Logo](bin/muten.png){:height="50%" width="50%"}
 
 ## Instructions
 1. Run main.py
@@ -15,7 +15,7 @@ python3 main.py
 4. Raise your palm so it fits into the 2 green regions, and then, press 's' to capture the skin.
 5. Enjoy.
 
-## Instalation
+## Installation
 You will have to install all libraries being used by the program. To do so, we have add a file named `requirements.txt` which will help you on this task.
 
 1. Install python library `virtualenv`
