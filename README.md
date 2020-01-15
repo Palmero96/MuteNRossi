@@ -32,3 +32,5 @@ pip install -r requirements.txt
 
 ## Dataset
 You can find the dataset used to train and test this model on the following link.
+
+[Used dataset](https://www.kaggle.com/grassknoted/asl-alphabet)
